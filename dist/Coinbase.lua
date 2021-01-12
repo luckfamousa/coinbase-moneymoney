@@ -4,6 +4,7 @@
 -- Username: Coinbase API Key
 -- Password: Coinbase API Secret
 --
+-- Copyright (c) 2020 Martin Wilhelmi
 -- Copyright (c) 2017 Nico Lindemann
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.0,
+  version = 1.1,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -143,4 +144,4 @@ function queryPublic(method, query)
   return json:dictionary()["data"]
 end
 
--- SIGNATURE: MC0CFQCL53JWGUM1E/1rQ6ItQC3OdmqbowIUL5r2mZmiTM9Xda+zYnBb+QKFIoM=
+-- SIGNATURE: MCwCFE6tsf2/MI7xXvd/+PQKEsR/acZ2AhQ6obll/RiBuKKeFp8N1CEP0StS5g==
