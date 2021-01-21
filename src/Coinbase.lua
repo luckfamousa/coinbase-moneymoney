@@ -26,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.1,
+  version = 1.11,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -44,7 +44,7 @@ local accountNumber = "Main"
 
 -- Some currency symbols are not convertable via Coinbase's API
 -- so we omit them during our account refresh cycle
-local ommittedCurrencies = {"REPV2"}
+local ommittedCurrencies = {"REPV2", "XRP"}
 
 function SupportsBank (protocol, bankCode)
   return protocol == ProtocolWebBanking and bankCode == "Coinbase Account"
