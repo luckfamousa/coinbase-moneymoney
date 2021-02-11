@@ -70,9 +70,11 @@ end
 
 function RefreshAccount (account, since)
   local s = {}
-  balances = queryPrivate("accounts")
+  primary_account = queryPrivate("accounts/primary")
+  accounts = queryPrivate("accounts")
+  accounts[#accounts+1] = primary_account
 
-  for key, value in pairs(balances) do
+  for key, value in pairs(accounts) do
     if not isInArray(value["currency"]["code"], ommittedCurrencies) then
       prices = queryPublic("exchange-rates", "?currency=" .. value["currency"]["code"])
       if value["type"] == "fiat" then
