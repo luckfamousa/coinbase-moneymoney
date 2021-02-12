@@ -26,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.11,
+  version = 1.3,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -70,11 +70,13 @@ end
 
 function RefreshAccount (account, since)
   local s = {}
-  balances = queryPrivate("accounts")
+  primary_account = queryPrivate("accounts/primary")
+  accounts = queryPrivate("accounts")
+  accounts[#accounts+1] = primary_account
+  exchange_rates = queryPublic("exchange-rates", "?currency=" .. currency)
 
-  for key, value in pairs(balances) do
+  for key, value in pairs(accounts) do
     if not isInArray(value["currency"]["code"], ommittedCurrencies) then
-      prices = queryPublic("exchange-rates", "?currency=" .. value["currency"]["code"])
       if value["type"] == "fiat" then
         s[#s+1] = {
           name = value["currency"]["name"],
@@ -89,7 +91,7 @@ function RefreshAccount (account, since)
           currency = nil,
           quantity = value["balance"]["amount"],
           amount = value["native_balance"]["amount"],
-          price = prices["rates"][value["native_balance"]["currency"]]
+          price = (1 / exchange_rates["rates"][value["currency"]["code"]])
         }
       end
     end
@@ -144,4 +146,4 @@ function queryPublic(method, query)
   return json:dictionary()["data"]
 end
 
--- SIGNATURE: MCwCFAKb3kflQsE+pVRjvwYeSIEj9+U/AhQzexGXIBhgB3K8ZsELu6C1Na7vaA==
+-- SIGNATURE: MCwCFFH2b6M/B3qfh0BjcC31We08uQsZAhQ2858f97mEGFk1T9Z8FWiPyCNRBg==
