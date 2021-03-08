@@ -26,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.4,
+  version = 1.5,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -70,7 +70,7 @@ end
 
 local function ContainsAccount (accounts, account)
   for index, value in ipairs(accounts) do
-    if value["currency"]["code"] == account["currency"]["code"] then
+    if value["name"] == account["name"] then
       return true
     end
   end
@@ -90,14 +90,14 @@ function RefreshAccount (account, since)
     if not isInArray(value["currency"]["code"], ommittedCurrencies) then
       if value["type"] == "fiat" then
         s[#s+1] = {
-          name = value["currency"]["name"],
+          name = value["currency"]["name"] .. " (" .. value["name"] .. ")",
           market = market,
           currency = currency,
           amount = value["balance"]["amount"]
         }
       else
         s[#s+1] = {
-          name = value["currency"]["name"],
+          name = value["currency"]["name"] .. " (" .. value["name"] .. ")",
           market = market,
           currency = nil,
           quantity = value["balance"]["amount"],
@@ -157,4 +157,4 @@ function queryPublic(method, query)
   return json:dictionary()["data"]
 end
 
--- SIGNATURE: MC0CFAbYYn3LeJmxHwfWhzN2dwZeG9VKAhUAmCeCc1cChzJJAbXhkEWTP3Hm+uo=
+-- SIGNATURE: MCwCFFs6ZGGtVScOw5F4isQaEn5nHHUjAhQ/SyRnoa5XKceAiQQmKa9lTWGu7w==
