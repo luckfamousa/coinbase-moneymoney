@@ -26,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.5,
+  version = 1.6,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -68,22 +68,9 @@ function ListAccounts (knownAccounts)
   return {account}
 end
 
-local function ContainsAccount (accounts, account)
-  for index, value in ipairs(accounts) do
-    if value["name"] == account["name"] then
-      return true
-    end
-  end
-  return false
-end
-
 function RefreshAccount (account, since)
   local s = {}
-  primary_account = queryPrivate("accounts/primary")
-  accounts = queryPrivate("accounts")
-  if not ContainsAccount(accounts, primary_account) then
-    accounts[#accounts+1] = primary_account
-  end
+  accounts = queryPrivate("accounts?limit=100")
   exchange_rates = queryPublic("exchange-rates", "?currency=" .. currency)
 
   for key, value in pairs(accounts) do
@@ -157,4 +144,4 @@ function queryPublic(method, query)
   return json:dictionary()["data"]
 end
 
--- SIGNATURE: MCwCFFs6ZGGtVScOw5F4isQaEn5nHHUjAhQ/SyRnoa5XKceAiQQmKa9lTWGu7w==
+-- SIGNATURE: MCwCFCofyiOSyzSxtZ3HpMzC/HuJgN1jAhQ5hf4JOzSKvjJxlruEsOFf1X6M1A==
