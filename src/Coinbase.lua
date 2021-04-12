@@ -26,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.6,
+  version = 1.7,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -41,10 +41,6 @@ local apiUrlVersion = "v2"
 local apiHeaderVersion = "2017-06-01"
 local market = "Coinbase"
 local accountNumber = "Main"
-
--- Some currency symbols are not convertable via Coinbase's API
--- so we omit them during our account refresh cycle
-local ommittedCurrencies = {"REPV2", "XRP"}
 
 function SupportsBank (protocol, bankCode)
   return protocol == ProtocolWebBanking and bankCode == "Coinbase Account"
@@ -74,7 +70,7 @@ function RefreshAccount (account, since)
   exchange_rates = queryPublic("exchange-rates", "?currency=" .. currency)
 
   for key, value in pairs(accounts) do
-    if not isInArray(value["currency"]["code"], ommittedCurrencies) then
+    if exchange_rates["rates"][value["currency"]["code"]] then
       if value["type"] == "fiat" then
         s[#s+1] = {
           name = value["currency"]["name"] .. " (" .. value["name"] .. ")",
@@ -99,14 +95,6 @@ function RefreshAccount (account, since)
 end
 
 function EndSession ()
-end
-
-function isInArray(value, array)
-  for i = 1, #array do
-    if array[i] == value then
-      return true
-    end
-  end
 end
 
 function bin2hex(s)
