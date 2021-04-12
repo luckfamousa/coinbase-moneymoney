@@ -29,4 +29,8 @@ Add a new account (type "Coinbase Account") and use your Coinbase API key as use
 
 ## Screenshots
 
+![113115847-23ee9300-920d-11eb-89a6-82afadbb3851](https://user-images.githubusercontent.com/92227/114431575-eea85480-9bbf-11eb-990e-e7c0a6dfd72b.png)
+
+![113115787-1507e080-920d-11eb-92b3-89198627a5d8](https://user-images.githubusercontent.com/92227/114431581-efd98180-9bbf-11eb-918e-e733adb7dedd.png)
+
 ![MoneyMoney screenshot with Coinbase balances](screen.png)
