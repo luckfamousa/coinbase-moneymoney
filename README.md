@@ -2,6 +2,12 @@
 
 Fetches balances from Coinbase API and returns them as securities
 
+# Version 2.0
+
+As of version 2.0, currencies whose number is `0` will no longer be displayed, possibly the individual history will disappear for this.
+
+However, the entire history for the Coinbase account remains.
+
 ## Extension Setup
 
 You can get a signed version of this extension from

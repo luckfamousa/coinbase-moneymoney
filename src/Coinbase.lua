@@ -26,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.8,
+  version = 2.0,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -82,7 +82,6 @@ function RefreshAccount (account, since)
         quantity = value["balance"]["amount"]
 
         if tonumber(quantity) ~= 0 then
-          
           price = (1 / exchange_rates["rates"][value["currency"]["code"]])
 
           s[#s+1] = {
