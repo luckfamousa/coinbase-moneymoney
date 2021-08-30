@@ -79,16 +79,20 @@ function RefreshAccount (account, since)
           amount = value["balance"]["amount"]
         }
       else
-        price = (1 / exchange_rates["rates"][value["currency"]["code"]])
         quantity = value["balance"]["amount"]
 
-        s[#s+1] = {
-          name = value["currency"]["name"] .. " (" .. value["name"] .. ")",
-          market = market,
-          quantity = quantity,
-          amount = price * quantity,
-          price = price
-        }
+        if tonumber(quantity) ~= 0 then
+          
+          price = (1 / exchange_rates["rates"][value["currency"]["code"]])
+
+          s[#s+1] = {
+            name = value["currency"]["name"] .. " (" .. value["name"] .. ")",
+            market = market,
+            quantity = quantity,
+            amount = price * quantity,
+            price = price
+          }
+        end
       end
     end
   end
