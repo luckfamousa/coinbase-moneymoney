@@ -26,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.8,
+  version = 2.0,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -79,16 +79,19 @@ function RefreshAccount (account, since)
           amount = value["balance"]["amount"]
         }
       else
-        price = (1 / exchange_rates["rates"][value["currency"]["code"]])
         quantity = value["balance"]["amount"]
 
-        s[#s+1] = {
-          name = value["currency"]["name"] .. " (" .. value["name"] .. ")",
-          market = market,
-          quantity = quantity,
-          amount = price * quantity,
-          price = price
-        }
+        if tonumber(quantity) ~= 0 then
+          price = (1 / exchange_rates["rates"][value["currency"]["code"]])
+
+          s[#s+1] = {
+            name = value["currency"]["name"] .. " (" .. value["name"] .. ")",
+            market = market,
+            quantity = quantity,
+            amount = price * quantity,
+            price = price
+          }
+        end
       end
     end
   end
@@ -134,4 +137,4 @@ function queryPublic(method, query)
   return json:dictionary()["data"]
 end
 
--- SIGNATURE: MCwCFAsHKPp6vB+vng+BVEv1oxa7HYQAAhRoPq0biv5CuzhIe2c7y12iYA75Mw==
+-- SIGNATURE: MC0CFQCN5T0XSSjJ7udLX/OsdV96EANHYwIUQkhcc4ANWCzeCRHFfatATLkX4kk=
