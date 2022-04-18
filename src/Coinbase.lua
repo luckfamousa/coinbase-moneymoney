@@ -4,7 +4,7 @@
 -- Username: Coinbase API Key
 -- Password: Coinbase API Secret
 --
--- Copyright (c) 2020 Martin Wilhelmi
+-- Copyright (c) 2020-2022 Martin Wilhelmi
 -- Copyright (c) 2017 Nico Lindemann
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,7 +26,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 2.0,
+  version = 2.1,
   url = "https://api.coinbase.com",
   description = "Fetch balances from Coinbase API and list them as securities",
   services = { "Coinbase Account" },
@@ -66,7 +66,7 @@ end
 
 function RefreshAccount (account, since)
   local s = {}
-  accounts = queryPrivate("accounts?limit=100")
+  accounts = queryPrivate("accounts?limit=250")
   exchange_rates = queryPublic("exchange-rates", "?currency=" .. currency)
 
   for key, value in pairs(accounts) do
