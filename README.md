@@ -26,9 +26,9 @@ If you download your API credentials from Coinbase in JSON format, they will loo
 ```json
 {
   "name": "organizations/.../apiKeys/...",
-  "privateKey": "-----BEGIN EC PRIVATE KEY-----\nM...9\nA...e\nu...A==\n-----END EC PRIVATE KEY-----\n"
+  "privateKey": "-----BEGIN EC PRIVATE KEY-----\nM...9\nA...e\nu...==\n-----END EC PRIVATE KEY-----\n"
 }
-
+```
 
 ## Extension Setup
 
