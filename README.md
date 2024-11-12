@@ -30,6 +30,8 @@ If you download your API credentials from Coinbase in JSON format, they will loo
 }
 ```
 
+Use the name as the key name and the privateKey as the private key. Do not change anything, and make sure to copy the entire key, including the `-----BEGIN EC PRIVATE KEY-----` and `-----END EC PRIVATE KEY-----` lines. Ensure that you do not include any accidental whitespace at the beginning or end of the key.
+
 ## Extension Setup
 
 You can get a signed version of this extension from
