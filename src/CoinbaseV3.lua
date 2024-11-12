@@ -201,24 +201,11 @@ function create_jwt(apiSecret, header, payload)
     return encoded_header .. "." .. encoded_payload .. "." .. encoded_signature
 end
 
--- Generate a hexadecimal nonce
-local function generate_hex_nonce(length)
-    local res = {}
-    local hex_chars = '0123456789abcdef'
-
-    for i = 1, length do
-        local rand_index = math.random(1, #hex_chars)
-        table.insert(res, hex_chars:sub(rand_index, rand_index))
-    end
-
-    return table.concat(res)
-end
-
 -- Query the advanced trade API with a private method
 -- See: https://docs.cdp.coinbase.com/advanced-trade/reference/
 function queryPrivate(method)
     local request_method = "GET"
-    local nonce = generate_hex_nonce(64)
+    local nonce = string.lower(MM.binToHex(MM.random(32)))
     local uri = request_method .. " " .. api_host .. api_path .. method
     local nbf = os.time()
     local exp = nbf + 120
