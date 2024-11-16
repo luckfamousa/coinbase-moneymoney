@@ -43,6 +43,9 @@ local api_path = "/api/v3/brokerage/"
 local market = "Coinbase"
 local accountNumber = "Main"
 
+-- Import the math module
+local math = require("math")
+
 function SupportsBank (protocol, bankCode)
     return protocol == ProtocolWebBanking and bankCode == "Coinbase Account"
 end
