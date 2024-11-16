@@ -81,25 +81,26 @@ function RefreshAccount(account_notused, since_notused)
     local size = accounts["size"]
     for i = 1, size do
         local account = accounts["accounts"][i]
-        if account["type"] == "ACCOUNT_TYPE_FIAT" and tonumber(account["available_balance"]["value"]) > 0 then
-            s[#s+1] = {
-                name = account["name"],
-                market = market,
-                currency = account["currency"],
-                amount = tonumber(account["available_balance"]["value"])
-            }
-        else
-            local prices = queryPrivate("market/products/" .. account["currency"] .. "-" .. currency)
-
-            if prices ~= nil and prices["error"] == nil and tonumber(account["available_balance"]["value"]) > 0 then
+        if math.abs(tonumber(account["available_balance"]["value"])) > 0 then
+            if account["type"] == "ACCOUNT_TYPE_FIAT" then
                 s[#s+1] = {
                     name = account["name"],
                     market = market,
-                    -- currency = account["currency"],
-                    quantity = tonumber(account["available_balance"]["value"]),
-                    amount = tonumber(account["available_balance"]["value"]) * tonumber(prices["price"]),
-                    price = tonumber(prices["price"])
+                    currency = account["currency"],
+                    amount = tonumber(account["available_balance"]["value"])
                 }
+            else
+                local prices = queryPrivate("market/products/" .. account["currency"] .. "-" .. currency)
+                if prices ~= nil and prices["error"] == nil then
+                    s[#s+1] = {
+                        name = account["name"],
+                        market = market,
+                        -- currency = account["currency"],
+                        quantity = tonumber(account["available_balance"]["value"]),
+                        amount = tonumber(account["available_balance"]["value"]) * tonumber(prices["price"]),
+                        price = tonumber(prices["price"])
+                    }
+                end
             end
         end
     end
