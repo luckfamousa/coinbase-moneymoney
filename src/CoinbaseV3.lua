@@ -81,19 +81,18 @@ function RefreshAccount(account_notused, since_notused)
     local size = accounts["size"]
     for i = 1, size do
         local account = accounts["accounts"][i]
-        if account["type"] == "ACCOUNT_TYPE_FIAT" then
-            s[#s+1] = {
-                name = account["name"],
-                market = market,
-                currency = account["currency"],
-                amount = account["available_balance"]["value"]
-            }
-        else
-            
-            local prices = queryPrivate("market/products/" .. account["currency"] .. "-" .. currency)
-            
-            -- filter accounts that are empty or have zero balance
-            if type(account["available_balance"]["value"]) == "number" and account["available_balance"]["value"] ~= 0 then
+        -- filter accounts that are empty or have zero balance
+        if type(account["available_balance"]["value"]) == "number" and account["available_balance"]["value"] ~= 0 then
+            if account["type"] == "ACCOUNT_TYPE_FIAT" then
+                s[#s+1] = {
+                    name = account["name"],
+                    market = market,
+                    currency = account["currency"],
+                    amount = account["available_balance"]["value"]
+                }
+            else
+                
+                local prices = queryPrivate("market/products/" .. account["currency"] .. "-" .. currency)
                 if prices == nil or prices["error"] then
                     s[#s+1] = {
                         name = account["name"],
