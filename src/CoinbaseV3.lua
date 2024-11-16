@@ -27,10 +27,10 @@
 -- SOFTWARE.
 
 WebBanking {
-    version = 2.0,
+    version = 3.0,
     url = "https://api.coinbase.com",
     description = "Fetch balances from Coinbase API V3 and list them as securities",
-    services = { "Coinbase V3" }
+    services = { "Coinbase Account" }
 }
 
 local apiKey
@@ -44,7 +44,7 @@ local market = "Coinbase"
 local accountNumber = "Main"
 
 function SupportsBank (protocol, bankCode)
-    return protocol == ProtocolWebBanking and bankCode == "Coinbase V3"
+    return protocol == ProtocolWebBanking and bankCode == "Coinbase Account"
 end
   
 function InitializeSession (protocol, bankCode, username, username2, password, username3)
