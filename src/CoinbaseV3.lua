@@ -43,9 +43,6 @@ local api_path = "/api/v3/brokerage/"
 local market = "Coinbase"
 local accountNumber = "Main"
 
--- Import the math module
-local math = require("math")
-
 function SupportsBank (protocol, bankCode)
     return protocol == ProtocolWebBanking and bankCode == "Coinbase Account"
 end
@@ -85,7 +82,7 @@ function RefreshAccount(account_notused, since_notused)
     for i = 1, size do
         local account = accounts["accounts"][i]
         local available_balance = tonumber(account["available_balance"]["value"])
-        if available_balance ~= nil and math.abs(available_balance) > 0 then
+        if abs(available_balance) > 0 then
             if account["type"] == "ACCOUNT_TYPE_FIAT" then
                 s[#s+1] = {
                     name = account["name"],
@@ -99,7 +96,6 @@ function RefreshAccount(account_notused, since_notused)
                     s[#s+1] = {
                         name = account["name"],
                         market = market,
-                        -- currency = account["currency"],
                         quantity = available_balance,
                         amount = available_balance * tonumber(prices["price"]),
                         price = tonumber(prices["price"])
@@ -116,6 +112,14 @@ function EndSession ()
 end
 
 -------------------- Helper functions --------------------
+
+-- Define a local abs() function
+function abs(x)
+    if x ~= nil then
+        return (x < 0) and -x or x
+    end
+    return nil
+end
 
 -- Function to pad a byte string to a specific length with leading zeros
 local function pad_to_length(data, length)
