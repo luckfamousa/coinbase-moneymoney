@@ -52,6 +52,8 @@ function InitializeSession (protocol, bankCode, username, username2, password, u
     apiSecret = password
     -- Take currency of first fiat account, ignores pagination limit (default: 49)
     -- See: https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccounts/
+    -- default to EUR if no fiat account is found
+    currency = "EUR"
     local accounts = queryPrivate("accounts")
     local size = accounts["size"]
     for i = 1, size do
