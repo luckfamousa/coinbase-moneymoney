@@ -121,6 +121,11 @@ function abs(x)
     return nil
 end
 
+-- Replace all "\n" with actual line breaks
+local function replace_newlines(str)
+    return str:gsub("\\n", "\n")
+end
+
 -- Function to pad a byte string to a specific length with leading zeros
 local function pad_to_length(data, length)
     if #data < length then
@@ -178,6 +183,7 @@ function create_jwt(apiSecret, header, payload)
 
     -- Load and parse the EC private key
     local key = apiSecret
+    key = replace_newlines(key) -- Replace "\n" with actual line breaks
     key = string.match(key, "BEGIN EC PRIVATE KEY%-%-%-%-%-%s*(.*)%-%-%-%-%-END EC PRIVATE KEY")
     key = string.gsub(key, "%s+", "")
     key = MM.base64decode(key)
