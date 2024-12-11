@@ -78,34 +78,40 @@ end
 
 function RefreshAccount(account_notused, since_notused)
     local s = {}
-    local accounts = queryPrivate("accounts")
+    local params = {
+        cursor = nil
+    }
 
-    local size = accounts["size"]
-    for i = 1, size do
-        local account = accounts["accounts"][i]
-        local available_balance = tonumber(account["available_balance"]["value"])
-        if abs(available_balance) > 0 then
-            if account["type"] == "ACCOUNT_TYPE_FIAT" then
-                s[#s+1] = {
-                    name = account["name"],
-                    market = market,
-                    currency = account["currency"],
-                    amount = available_balance
-                }
-            else
-                local prices = queryPrivate("market/products/" .. account["currency"] .. "-" .. currency)
-                if prices ~= nil and prices["error"] == nil then
+    repeat
+        local accounts = queryPrivate("accounts", params)
+        local size = accounts["size"]
+        params["cursor"] = accounts["cursor"]
+        for i = 1, size do
+            local account = accounts["accounts"][i]
+            local available_balance = tonumber(account["available_balance"]["value"])
+            if abs(available_balance) > 0 then
+                if account["type"] == "ACCOUNT_TYPE_FIAT" then
                     s[#s+1] = {
                         name = account["name"],
                         market = market,
-                        quantity = available_balance,
-                        amount = available_balance * tonumber(prices["price"]),
-                        price = tonumber(prices["price"])
+                        currency = account["currency"],
+                        amount = available_balance
                     }
+                else
+                    local prices = queryPrivate("market/products/" .. account["currency"] .. "-" .. currency)
+                    if prices ~= nil and prices["error"] == nil then
+                        s[#s+1] = {
+                            name = account["name"],
+                            market = market,
+                            quantity = available_balance,
+                            amount = available_balance * tonumber(prices["price"]),
+                            price = tonumber(prices["price"])
+                        }
+                    end
                 end
             end
         end
-    end
+    until accounts["has_next"] ~= true
 
     return {securities = s}
 end
@@ -218,9 +224,31 @@ local function generate_hex_nonce(length)
     return table.concat(res)
 end
 
--- Query the advanced trade API with a private method
+-- Build a GET parameter string
+-- Does not care about escaping at all, used for known parameters with
+-- non-escaped characters only.
+local function make_params(params)
+    local first = true
+    local out = ""
+    if params ~= nil then
+        for k, v in pairs(params) do
+            if v ~= nil then
+                if first == true then
+                    out = out .. "?"
+                    first = false
+                else
+                    out = out .. "&"
+                end
+                out = out .. k .. "=" .. v
+            end
+        end
+    end
+    return out
+end
+
+-- Query the advanced trade API with a private method and optional parameters
 -- See: https://docs.cdp.coinbase.com/advanced-trade/reference/
-function queryPrivate(method)
+function queryPrivate(method, params)
     local request_method = "GET"
     local nonce = generate_hex_nonce(64)
     local uri = request_method .. " " .. api_host .. api_path .. method
@@ -236,7 +264,7 @@ function queryPrivate(method)
     headers["Authorization"] = "Bearer " .. jwt_token
     
     local connection = Connection()
-    local content = connection:request("GET", url .. path, nil, nil, headers)
+    local content = connection:request("GET", url .. path .. make_params(params), nil, nil, headers)
   
     local json = JSON(content)
     return json:dictionary()
